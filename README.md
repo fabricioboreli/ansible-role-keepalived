@@ -1,40 +1,46 @@
-Ansible Role Skeleton
-=====================
-Esqueleto/Modelo de estrutura de diretórios para criação de role Ansible.
+Keepalived
+==========
+Ansible Role para instalar e configurar Keepalived.  
 
+Este role instala os pacotes necessários e transfere o arquivo de configuração _keepalived.conf_.
 
 Requisitos
 ----------
-Nenhum / Debian 8
+Debian 9  
 
-Variaveis do Role
+Variáveis do Role
 -----------------
-Descrição das variaveis:
-
+Arquivo de configuração:
 ```yaml
-codigo_yaml: variavel_content
+keepalived_config_file: "env_data/router_01/keepalived.conf.j2"
 ```
 
 Dependências
 ------------
-Não depende de nenhum outro role.
+
+Nenhuma.
 
 Playbook de exemplo
 -------------------
 ```yaml
-- name: Role name
-  hosts: server
+---
+- name: Instala e configura keepalived
+  hosts: router-01
   become: true
   gather_facts: true
 
   roles:
-    - role: roles_name
+    - role: ansible-role-keepalived
+      keepalived_config_file: "env_data/router_01/keepalived.conf.j2"
 ```
 
 Licença
 -------
+
 MIT
 
 Informações do Autor
 --------------------
-Fabricio Boreli Ferreira  
+
+Fabricio Boreli  
+fabricioboreli at openmailbox dot org
