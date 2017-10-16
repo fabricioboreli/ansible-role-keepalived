@@ -1,2 +1,42 @@
 ---
-# tasks file for ansible-repo
+- name: ansible-keepalived | Instala pacotes
+  apt:
+    update_cache: yes
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libipset3
+    - keepalived
+
+- name: ansible-keepalived | Ativa ip_nonlocal_bind
+  sysctl:
+    name: "net.ipv4.ip_nonlocal_bind"
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: ansible-keepalived | Cria diretorio scripts
+  file:
+    path: "/opt/scripts"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+    
+- name: ansible-keepalived | Copia script do conntrackd
+  copy:
+    src: "primary-backup.sh"
+    dest: "/opt/scripts/primary-backup.sh"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: ansible-keepalived | Copia o arquivo de configuracao
+  template:
+    src: "{{ keepalived_config_file }}"
+    dest: "/etc/keepalived/keepalived.conf"
+    owner: root
+    group: root
+    mode: 0640
+  notify: ansible-keepalived | Reinicia o daemon
